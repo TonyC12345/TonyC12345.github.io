@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vina+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Glass+Antiqua&display=swap" rel="stylesheet">
+  <title>BLT</title>
+  <style>
+    body {
+      text-align: center;
+      background: url("https://i.imgur.com/JEFYM9C.gif");
+      background-size: cover;
+      background-position: center;
+      color: red;
+    }
+    p {
+      font-size: 26px;
+      font-family: 'Glass Antiqua', cursive;
+    }
+    input {
+      border: 10;
+      padding: 15px;
+      font-size: 20px;
+    }
+    input[type="submit"] {
+      background: pink;
+      color: blue;
+      font-family: 'Vina Sans', sans-serif;
+    }
+    img {
+      margin: 40px 0px 0px 0px;
+      border: 7px solid white;
+      border-radius: 50px;
+    }
+ 
+  </style>
+</head>
+<body>
+  <img src="https://i.imgur.com/7o8vLPO.jpg">
+  <p>Hi, Im John Montagu, the 4th Earl of Sandwich® NOW ORDER MY BLT</p>
+  <input id="Name" placeholder="Your Name">
+  <input id="Email" type="email" placeholder="Yelp Review email">
+  <input id="submit" type="submit">
+  
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA1nfiNjL6tv5ABbyj3n7C9eoR4qCkeSSo",
+      authDomain: "tony-project-daaab.firebaseapp.com",
+      databaseURL: "https://tony-project-daaab-default-rtdb.firebaseio.com",
+      projectId: "tony-project-daaab",
+      storageBucket: "tony-project-daaab.appspot.com",
+      messagingSenderId: "288346883941",
+      appId: "1:288346883941:web:48a293fec29be7bff9c38c"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const Name = document.querySelector("#Name") 
+    const Email = document.querySelector("#Email")
+    document.querySelector('#submit').addEventListener('click', Submit)
+    
+	function Submit() {
+	  const timestamp = buildTimestamp()
+	  
+	  set(ref(db, timestamp), {
+		  Name: Name.value,
+	      email: Email.value,
+	  });
+
+	  Name.value = ""
+	  Email.value = ""
+	}
+    
+    function buildTimestamp() {
+    	  const now = new Date();
+    	  let timestamp = now.getFullYear().toString() + "/";
+    	  //const month = now.toLocaleString('default', { month: 'long' });
+
+    	  let month = now.getMonth()+1   //add 1 because Javascript uses 0 for January
+    	  month = month.toString()
+    	  month = addLeadingZero(month)
+    	  timestamp += month + "/"; 
+
+    	  let date = now.getDate().toString()
+    	  date = addLeadingZero(date)
+    	  timestamp += date + "/";
+
+    	  let hours = now.getHours().toString()
+    	  hours = addLeadingZero(hours)
+    	  timestamp += hours + ":";
+
+    	  let minutes = now.getMinutes().toString()
+    	  minutes = addLeadingZero(minutes)
+    	  timestamp += minutes + ":";
+
+    	  let seconds = now.getSeconds().toString()
+    	  seconds = addLeadingZero(seconds)
+    	  timestamp += seconds;
+  
+    	  return timestamp
+    	}
+	
+    	function addLeadingZero(units) {
+    		if (units.length < 2) {
+    			units = "0" + units
+    		}
+    		return units
+    	}
+    
+  </script>
+</body>
